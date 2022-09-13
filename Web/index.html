@@ -10,7 +10,7 @@
         인공지능 연예인 닮은꼴
     </div>
     <div>Teachable Machine Image Model</div>
-    <button type="button" onclick="predict()">Predict</button>
+    <button type="button" onclick="inference()">inference</button>
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <div class="file-upload">
         <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add
@@ -31,25 +31,6 @@
             </div>
         </div>
     </div>
-
-    <div id="label-container"></div>
-
-    <!-- Import Tensorflow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.4.5/dist/tf.min.js"></script>
-    <script src="@tensorflow/tfjs" type="module"></script>
-    <script src="@tensorflow/tfjs-node" type="module"></script>
-
-    <script>
-        async function predict() {
-            // predict can take in an image
-            const handler = tfn.io.fileSystem("./../EfficientNetB0.js/model.json");
-            const tfmodel = await tf.loadLayersModel(handler);
-
-            var image = document.getElementById("face-image");
-            var predict = tfmodel.predict(image)
-            print(predict)
-        }
-    </script>
 
     <script>
         function readURL(input) {
@@ -80,6 +61,25 @@
         });
     </script>>
 
+    <div id="label-container"></div>
+
+    <!-- Import Tensorflow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+
+    <script type="text/javascript">
+        async function inference() {
+            print("DaeEun");
+            // predict can take in an image
+            // const handler = tfn.io.fileSystem();
+            const tfmodel = await tf.loadLayersModel("EfficientNetB0/model.json");
+
+            print(tfmodel.summary());
+
+            var image = document.getElementById("face-image");
+            var predict = tfmodel.predict(image);
+            print(predict)
+        }
+    </script>
 </body>
 
 <!-- Copyright (c) 2020 by Aaron Vanston (https://codepen.io/aaronvanston/pen/yNYOXR)
