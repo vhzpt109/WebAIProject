@@ -6,11 +6,11 @@
 </head>
 
 <body>
-    <div class="title">
-        인공지능 연예인 닮은꼴
-    </div>
-    <button type="button" onclick="efficientnetb0_inference()">efficientnetb0</button>
-    <button type="button" onclick="mobilenetv2_inference()">mobilenetv2</button>
+    <div class="title">인공지능 연예인 닮은꼴</div>
+
+    <button type="button" value="EfficientNetB0" onclick="inference()">EfficientNetB0</button>
+    <button type="button" value="MobileNetV2" onclick="inference()">MobileNetV2</button>
+
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <div class="file-upload">
         <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add
@@ -22,8 +22,9 @@
                 <h3>Drag and drop a file or select add Image</h3>
             </div>
         </div>
+
         <div class="file-upload-content">
-            <img class="file-upload-image" id="face-image"/>
+            <img class="file-upload-image" id="image"/>
             <div class="image-title-wrap">
                 <button type="button" onclick="removeUpload()" class="remove-image">Remove
                     <span class="image-title">Uploaded Image</span>
@@ -66,32 +67,28 @@
     <!-- Import Tensorflow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.5.2/dist/tf.min.js"></script>
 
+    <!-- Inference -->
     <script type="text/javascript">
-        async function efficientnetb0_inference() {
-            // predict can take in an image
-            const tfmodel = await tf.loadLayersModel("./EfficientNetB0/model.json");
-            console.log("EfficientNetB0 Loaded");
-
-            // print(tfmodel.summary());
-
-            const image = document.getElementById("face-image");
-            console.log(image)
-
-            const predict = await tfmodel.predict(image);
-            console.log(predict)
-        }
-        async function mobilenetv2_inference() {
-            // predict can take in an image
+        async function inference() {
+            // const tfmodel = await tf.loadLayersModel("./EfficientNetB0/model.json");
             const tfmodel = await tf.loadLayersModel("./MobileNetV2/model.json");
-            console.log("MobileNetV2 Loaded");
+            console.log("Model Loaded");
 
             // print(tfmodel.summary());
+            
+            var imageElement = document.getElementById("image");
 
-            const image = document.getElementById("face-image");
-            console.log(image)
+            let image = tf.browser.fromPixels(imageElement);
+            image = tf.image.resizeBilinear(image, [224, 224]);
+            image = tf.expandDims(image, 0);
+            console.log("Image to Tensor Success");
 
             const predict = await tfmodel.predict(image);
-            console.log(predict)
+            console.log("Predict Success");
+
+            const predictargMax = predict.argMax(1);
+            console.log("Output :");
+            predictargMax.print();
         }
     </script>
 </body>
