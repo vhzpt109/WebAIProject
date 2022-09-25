@@ -52,6 +52,9 @@
             $('.file-upload-input').replaceWith($('.file-upload-input').clone());
             $('.file-upload-content').hide();
             $('.image-upload-wrap').show();
+
+            labelContainer = document.getElementById("predict-container");
+            labelContainer.innerHTML = "";
         }
         $('.image-upload-wrap').bind('dragover', function () {
             $('.image-upload-wrap').addClass('image-dropping');
@@ -61,38 +64,41 @@
         });
     </script>>
 
-    <div id="label-container"></div>
+    <div id="predict-container"></div>
 
     <!-- Import Tensorflow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.20.0/dist/tf.min.js"></script>
 
-    <script src="./imagenet-simple-labels.json" type="text/javascript"></script>
+    <script src="./imagenet_class_index.json" type="text/javascript"></script>
 
     <!-- Inference -->
     <script type="text/javascript">
         async function inference() {
-            // const tfmodel = await tf.loadLayersModel("./MobileNetV2/model.json");
-            // console.log("Model Loaded");
+            const tfmodel = await tf.loadLayersModel("./MobileNetV2/model.json");
+            console.log("Model Loaded");
 
-            // // print(tfmodel.summary());
+            // print(tfmodel.summary());
             
-            // var imageElement = document.getElementById("image");
+            var imageElement = document.getElementById("image");
 
-            // let image = tf.browser.fromPixels(imageElement);
-            // image = tf.image.resizeBilinear(image, [224, 224]);
-            // image = image.div(255);
-            // image = tf.expandDims(image, 0);
-            // console.log("Image to Tensor Success");
+            let image = tf.browser.fromPixels(imageElement);
+            image = tf.image.resizeBilinear(image, [224, 224]);
+            image = image.div(255);
+            image = tf.expandDims(image, 0);
+            console.log("Image to Tensor Success");
 
-            // const predict = await tfmodel.predict(image);
-            // console.log("Predict Success");
+            const predict = await tfmodel.predict(image);
+            console.log("Predict Success");
 
-            // const predictargMax = predict.argMax(1);
-            // console.log("Output :");
-            // predictargMax.print();
+            const predictedArgMax = predict.argMax(1);
+            var predictedIndex = predictedArgMax.dataSync()[0];
+            console.log("predictedIndex :", predictedIndex);
 
-            let ImageNetClass = JSON.parse(imagenet-simple-labels.json);
-            console.log(ImageNetClass);
+            var ImageNetClass = JSON.parse(JSON.stringify(imagenet));
+            console.log(ImageNetClass[0][predictedIndex][1]);
+
+            labelContainer = document.getElementById("predict-container");
+            labelContainer.innerHTML = ImageNetClass[0][predictedIndex][1];
         }
     </script>
 </body>
