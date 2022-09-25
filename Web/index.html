@@ -8,7 +8,6 @@
 <body>
     <div class="title">인공지능 연예인 닮은꼴</div>
 
-    <button type="button" value="EfficientNetB0" onclick="inference()">EfficientNetB0</button>
     <button type="button" value="MobileNetV2" onclick="inference()">MobileNetV2</button>
 
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -65,30 +64,35 @@
     <div id="label-container"></div>
 
     <!-- Import Tensorflow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.5.2/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.20.0/dist/tf.min.js"></script>
+
+    <script src="./imagenet-simple-labels.json" type="text/javascript"></script>
 
     <!-- Inference -->
     <script type="text/javascript">
         async function inference() {
-            // const tfmodel = await tf.loadLayersModel("./EfficientNetB0/model.json");
-            const tfmodel = await tf.loadLayersModel("./MobileNetV2/model.json");
-            console.log("Model Loaded");
+            // const tfmodel = await tf.loadLayersModel("./MobileNetV2/model.json");
+            // console.log("Model Loaded");
 
-            // print(tfmodel.summary());
+            // // print(tfmodel.summary());
             
-            var imageElement = document.getElementById("image");
+            // var imageElement = document.getElementById("image");
 
-            let image = tf.browser.fromPixels(imageElement);
-            image = tf.image.resizeBilinear(image, [224, 224]);
-            image = tf.expandDims(image, 0);
-            console.log("Image to Tensor Success");
+            // let image = tf.browser.fromPixels(imageElement);
+            // image = tf.image.resizeBilinear(image, [224, 224]);
+            // image = image.div(255);
+            // image = tf.expandDims(image, 0);
+            // console.log("Image to Tensor Success");
 
-            const predict = await tfmodel.predict(image);
-            console.log("Predict Success");
+            // const predict = await tfmodel.predict(image);
+            // console.log("Predict Success");
 
-            const predictargMax = predict.argMax(1);
-            console.log("Output :");
-            predictargMax.print();
+            // const predictargMax = predict.argMax(1);
+            // console.log("Output :");
+            // predictargMax.print();
+
+            let ImageNetClass = JSON.parse(imagenet-simple-labels.json);
+            console.log(ImageNetClass);
         }
     </script>
 </body>
