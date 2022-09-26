@@ -1,0 +1,6 @@
+downloads/*
+*.xlxs
+*.jpg
+*.png
+Web/MobileNetV2/*.bin
+Web/MobileNetV2/*.json
